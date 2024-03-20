@@ -1,26 +1,25 @@
 #ifndef DOUBLY_LINKED_LIST_H
 #define DOUBLY_LINKED_LIST_H
 
+#include <iostream>
+#include <memory>
 #include <cstddef>
-
-struct Node {
-    Node* prev;
-    Node* next;
-    int data;
-
-    Node(const int value) : 
-        data(value), 
-        prev(nullptr), 
-        next(nullptr) 
-    {
-    }
-};
-
 
 class DoublyLinkedList {
 private:
-    Node* head;
-    Node* tail;
+    struct Node {
+        std::shared_ptr<Node> prev;
+        std::shared_ptr<Node> next;
+        int data;
+
+        explicit Node(int value) : 
+            data(value), 
+            prev(nullptr), 
+            next(nullptr){}
+    };
+    
+    std::shared_ptr<Node> head;
+    std::shared_ptr<Node> tail;
     size_t size;
 
 public:

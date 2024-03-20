@@ -1,11 +1,9 @@
 #include "../include/DoublyLinkedList.h"
-#include <iostream>
-
 
 DoublyLinkedList::DoublyLinkedList() : head(nullptr), tail(nullptr), size(0) {}
 
 void DoublyLinkedList::add(int value) {
-    Node* newNode = new Node(value);
+    std::shared_ptr<Node> newNode = std::make_shared<Node>(value);
     if (tail == nullptr) {
         head = tail = newNode;
     } else {
@@ -18,7 +16,7 @@ void DoublyLinkedList::add(int value) {
 
 
 void DoublyLinkedList::remove(int value) {
-    Node* current = head;
+    std::shared_ptr<Node> current = head;
     while (current != nullptr) {
         if (current->data == value) {
 	    if (current->prev) current->prev->next = current->next;
@@ -32,7 +30,7 @@ void DoublyLinkedList::remove(int value) {
 	    }
 
             std::cout << "Removing item: " << current->data << "\n";
-            delete current;
+            current.reset(); // release memory held by shared pointer
             size--;
             return;
         }
@@ -47,7 +45,7 @@ size_t DoublyLinkedList::getLength() const {
 
 
 void DoublyLinkedList::printList() const {
-    Node* current = head;
+    std::shared_ptr<Node> current = head;
     while (current != nullptr) {
         std::cout << current->data << " ";
         current = current->next;
@@ -59,15 +57,15 @@ void DoublyLinkedList::printList() const {
 DoublyLinkedList::~DoublyLinkedList() {
 
     std::cout << "Destructor called to perform clean up...\n";
-    Node* current = head;
+    std::shared_ptr<Node> current = head;
     
     int numItems = this->getLength();
     std::cout << "DoublyLinkedList has " << numItems << " items\n";
 
     while (current != nullptr) {
         std::cout << "Removing item: " << current->data << "\n";
-        Node* next = current->next;
-        delete current;
+        std::shared_ptr<Node> next = current->next;
+        current;
         current = next;
     }
 
